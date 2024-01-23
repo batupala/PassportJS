@@ -11,9 +11,11 @@ const login = (req, res, next) => {
 
     const hatalar = validationResult(req);
 
-    req.flash('validation_error', hatalar.array());
-    req.flash('email', req.body.email);
+
     if (!hatalar.isEmpty()) {
+
+        req.flash('validation_error', hatalar.array());
+        req.flash('email', req.body.email);
 
         req.flash('password', req.body.password);
 
@@ -89,15 +91,32 @@ const forgetPassword = (req, res, next) => {
     res.render('forget_password', { layout: './layout/auth_layout.ejs' });
 }
 
-const logout = (req, res, next) => {
-    req.logout();
-    req.session.destroy((error) => {
+// const logout = (req, res, next) => {
+//     req.logout();
+//     req.session.destroy((error) => {
 
-        //req.flash('success_message', [{ msg: 'Çıkış başarılı' }]);
-        res.clearCookie('connect.sid');
-        res.render('login', { layout: './layout/auth_layout.ejs', success_message: [{ msg: 'Çıkış başarılı' }] })
-        // res.redirect('/login');
-        //res.send('çıkış yapıldı');
+//         //req.flash('success_message', [{ msg: 'Çıkış başarılı' }]);
+//         res.clearCookie('connect.sid');
+//         res.render('login', { layout: './layout/auth_layout.ejs', success_message: [{ msg: 'Çıkış başarılı' }] })
+//         // res.redirect('/login');
+//         //res.send('çıkış yapıldı');
+//     });
+// }
+
+const logout = (req, res, next) => {
+    // req.logout(function () {});
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+
+        req.session.destroy((error) => {
+
+            //req.flash('success_message', [{ msg: 'Çıkış başarılı' }]);
+            res.clearCookie('connect.sid');
+            // res.render('login', { layout: './layout/auth_layout.ejs', success_message: [{ msg: 'Çıkış başarılı' }] })
+            res.redirect('/login');
+        });
     });
 }
 

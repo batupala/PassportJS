@@ -22,6 +22,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 
 const sessionStore = new MongoDBStore({
     url: process.env.MONGODB_CONNECTION_STRING,
+    databaseName: 'Proje',
     collection: 'sessionlar'
 });
 
